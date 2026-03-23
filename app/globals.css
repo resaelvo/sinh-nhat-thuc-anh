@@ -8,7 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
@@ -22,5 +22,104 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* Lời bài hát — chỉ animate transform (GPU), tránh motion JS liên tục */
+@keyframes music-lyrics-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -120px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.music-lyrics-scroll {
+  animation: music-lyrics-drift 18s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-lyrics-scroll {
+    animation: none;
+    will-change: auto;
+  }
+}
+
+/* Hoa anh đào rơi — opacity cao hơn, vẫn chỉ transform (GPU) */
+@keyframes sakura-fall-a {
+  0% {
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.92;
+  }
+  88% {
+    opacity: 0.78;
+  }
+  100% {
+    transform: translate3d(36px, 115vh, 0) rotate(320deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sakura-fall-b {
+  0% {
+    transform: translate3d(0, -12vh, 0) rotate(-8deg);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.9;
+  }
+  88% {
+    opacity: 0.74;
+  }
+  100% {
+    transform: translate3d(-32px, 115vh, 0) rotate(-280deg);
+    opacity: 0;
+  }
+}
+
+.sakura-petal {
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.sakura-petal--a {
+  animation-name: sakura-fall-a;
+}
+
+.sakura-petal--b {
+  animation-name: sakura-fall-b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sakura-petal {
+    animation: none !important;
+    will-change: auto;
+  }
+}
+
+/* Sticky music bar — liquid glass (chỉ dùng cho thanh nhạc góc phải) */
+.music-liquid-glass {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.52) 0%,
+    rgba(245, 243, 255, 0.38) 45%,
+    rgba(255, 255, 255, 0.44) 100%
+  );
+  /* Blur vừa phải — blur quá mạnh + transform/hover dễ gây jank */
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  box-shadow:
+    0 8px 28px rgba(91, 33, 182, 0.1),
+    0 1px 0 rgba(255, 255, 255, 0.75) inset,
+    0 -1px 0 rgba(167, 139, 250, 0.12) inset;
 }
